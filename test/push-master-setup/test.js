@@ -30,7 +30,7 @@ nock("https://api.github.com", {
   },
 })
   // check if toot-together-setup branch exists
-  .head("/repos/joschi/toot-together/git/refs/heads/toot-together-setup")
+  .head("/repos/joschi/toot-together/git/refs/heads%2Ftoot-together-setup")
   .reply(404)
 
   // Create the "toot-together-setup" branch
@@ -43,11 +43,11 @@ nock("https://api.github.com", {
   .reply(201)
 
   // Read contents of toots/README.md file in joschi/toot-together
-  .get("/repos/joschi/toot-together/contents/toots/README.md")
+  .get("/repos/joschi/toot-together/contents/toots%2FREADME.md")
   .reply(200, "contents of toots/README.md")
 
   // Create toots/README.md file
-  .put("/repos/joschi/toot-together/contents/toots/README.md", (body) => {
+  .put("/repos/joschi/toot-together/contents/toots%2FREADME.md", (body) => {
     tap.equal(
       body.content,
       Buffer.from("contents of toots/README.md").toString("base64")

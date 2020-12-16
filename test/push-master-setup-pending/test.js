@@ -30,7 +30,7 @@ nock("https://api.github.com", {
   },
 })
   // check if toot-together-setup branch exists
-  .head("/repos/joschi/toot-together/git/refs/heads/toot-together-setup")
+  .head("/repos/joschi/toot-together/git/refs/heads%2Ftoot-together-setup")
   .reply(200);
 
 process.on("exit", (code) => {
