@@ -17,7 +17,7 @@
   "dependencies": {
     "@actions/core": "1.2.6",
     "@octokit/action": "^3.1.6",
-    "masto": "^3.6.4",
+    "masto": "^3.7.0",
     "parse-diff": "^0.7.1"
   },
   "devDependencies": {
