@@ -23,7 +23,7 @@
   "devDependencies": {
     "@semantic-release/git": "^10.0.1",
     "@zeit/ncc": "^0.22.3",
-    "nock": "^13.2.6",
+    "nock": "^13.2.7",
     "prettier": "^2.6.2",
     "semantic-release": "^19.0.3",
     "tap": "^16.2.0"
