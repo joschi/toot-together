@@ -8,9 +8,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4.0.0
+      - uses: actions/setup-node@v4
         with:
-          version: 16
+          version: 20
       - run: npm ci
       - run: npm run lint:fix
       - uses: gr2m/create-or-update-pull-request-action@v1.x

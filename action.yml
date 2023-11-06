@@ -5,5 +5,5 @@ branding:
   icon: share-2
   color: blue
 runs:
-  using: "node12"
+  using: "node20"
   main: "dist/index.js"
