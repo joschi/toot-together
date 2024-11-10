@@ -26,7 +26,7 @@ process.env.GITHUB_SHA = "";
 nock("https://api.github.com")
   // get changed files
   .get(
-    "/repos/joschi/toot-together/compare/0000000000000000000000000000000000000001...0000000000000000000000000000000000000002"
+    "/repos/joschi/toot-together/compare/0000000000000000000000000000000000000001...0000000000000000000000000000000000000002",
   )
   .reply(200, {
     files: [

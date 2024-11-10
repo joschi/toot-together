@@ -52,7 +52,7 @@ index 0000000..0123456
 --- /dev/null
 +++ b/toots/hello-world.toot
 @@ -0,0 +1 @@
-+Hello, world!`
++Hello, world!`,
   );
 
 process.on("exit", (code) => {
