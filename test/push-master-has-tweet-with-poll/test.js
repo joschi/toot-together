@@ -32,7 +32,7 @@ nock("https://api.github.com", {
 })
   // get changed files
   .get(
-    "/repos/joschi/toot-together/compare/0000000000000000000000000000000000000001...0000000000000000000000000000000000000002"
+    "/repos/joschi/toot-together/compare/0000000000000000000000000000000000000001...0000000000000000000000000000000000000002",
   )
   .reply(200, {
     files: [
@@ -49,7 +49,7 @@ nock("https://api.github.com", {
     (body) => {
       tap.equal(body.body, "Tooted:\n\n- https://mastodon.example/@joschi/1");
       return true;
-    }
+    },
   )
   .reply(201);
 

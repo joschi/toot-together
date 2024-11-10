@@ -50,7 +50,7 @@ nock("https://api.github.com", {
   .put("/repos/joschi/toot-together/contents/toots%2FREADME.md", (body) => {
     tap.equal(
       body.content,
-      Buffer.from("contents of toots/README.md").toString("base64")
+      Buffer.from("contents of toots/README.md").toString("base64"),
     );
     tap.equal(body.branch, "toot-together-setup");
     tap.equal(body.message, "toot-together setup");
@@ -64,7 +64,7 @@ nock("https://api.github.com", {
     tap.equal(body.title, "🐘 toot-together setup");
     tap.match(
       body.body,
-      /This pull requests creates the `toots\/` folder where your `\*\.toot` files go into/
+      /This pull requests creates the `toots\/` folder where your `\*\.toot` files go into/,
     );
     tap.equal(body.head, "toot-together-setup");
     tap.equal(body.base, "master");

@@ -57,7 +57,7 @@ index 0000000..0123456
 +[ ] option 1
 +[] option 2
 +[ ]  option 3
-+[]  option 4`
++[]  option 4`,
   );
 
 // create check run

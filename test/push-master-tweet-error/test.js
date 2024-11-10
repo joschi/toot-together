@@ -32,7 +32,7 @@ nock("https://api.github.com", {
 })
   // get changed files
   .get(
-    "/repos/joschi/toot-together/compare/0000000000000000000000000000000000000001...0000000000000000000000000000000000000002"
+    "/repos/joschi/toot-together/compare/0000000000000000000000000000000000000001...0000000000000000000000000000000000000002",
   )
   .reply(200, {
     files: [
@@ -50,7 +50,7 @@ nock("https://api.github.com", {
       console.log(body.body);
       tap.equal(body.body, "Errors:\n\n- Text character limit of 500 exceeded");
       return true;
-    }
+    },
   )
   .reply(201);
 
