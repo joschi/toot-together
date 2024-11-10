@@ -51,7 +51,7 @@ new file mode 100644
 index 0000000..0123456
 --- /dev/null
 +++ b/toots/hello-world.toot
-@@ -0,0 +6 @@
+@@ -0,0 +1,6 @@
 +Here is my poll
 +
 +[ ] option 1
