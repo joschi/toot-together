@@ -25,7 +25,7 @@
     "@vercel/ncc": "^0.38.3",
     "nock": "^14.0.1",
     "prettier": "^3.5.0",
-    "semantic-release": "^24.2.1",
+    "semantic-release": "^24.2.2",
     "tap": "^16.3.4"
   },
   "repository": {
