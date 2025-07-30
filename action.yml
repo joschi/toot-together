@@ -4,6 +4,17 @@ author: 'Jochen Schalanda'
 branding:
   icon: share-2
   color: blue
+inputs:
+  visibility:
+    description: "The toot's visibility"
+    type: choice
+    required: true
+    default: 'unlisted'
+    options:
+      - public
+      - unlisted
+      - private
+      - direct
 runs:
   using: "node20"
   main: "dist/index.js"

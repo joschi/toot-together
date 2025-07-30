@@ -60,6 +60,8 @@ You can submit a toot to this repository to see the magic happen. Please follow 
            uses: actions/checkout@v2
          - name: Toot
            uses: joschi/toot-together@v1.x
+           with:
+             visibility: "unlisted"
            env:
              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
              # URL to the instance hosting your Mastodon account
