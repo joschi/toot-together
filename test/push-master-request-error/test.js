@@ -4,6 +4,7 @@
  */
 
 const path = require("path");
+const assert = require("assert");
 
 const { mockGitHub, pendingMocks, setup } = require("../mock-github");
 const nock = require("nock");
@@ -34,8 +35,8 @@ mockGitHub()
   .reply(500);
 
 process.on("exit", (code) => {
-  tap.equal(code, 1);
-  tap.deepEqual(pendingMocks(), []);
+  assert.equal(code, 1);
+  assert.deepEqual(nock.pendingMocks(), []);
 
   // above code exits with 1 (error), but tap expects 0.
   // Tap adds the "process.exitCode" property for that purpose.
