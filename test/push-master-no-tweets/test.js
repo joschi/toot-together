@@ -4,6 +4,7 @@
  */
 
 const path = require("path");
+const assert = require("assert");
 
 const { mockGitHub, pendingMocks, setup } = require("../mock-github");
 const nock = require("nock");
@@ -40,11 +41,8 @@ mockGitHub()
   });
 
 process.on("exit", (code) => {
-  tap.equal(code, 0);
-  tap.deepEqual(pendingMocks(), []);
-
-  // for some reason, tap fails with "Suites:   1 failed" if we don't exit explicitly
-  process.exit(0);
+  assert.equal(code, 0);
+  assert.deepEqual(nock.pendingMocks(), []);
 });
 
 require("../../lib");

@@ -65,7 +65,7 @@ nock("https://mastodon.example")
 
 nock("https://mastodon.example")
   .post("/api/v1/statuses", (body) => {
-    tap.deepEquals(body.poll.options, [
+    tap.same(body.poll.options, [
       "option 1",
       "option 2",
       "option 3",
