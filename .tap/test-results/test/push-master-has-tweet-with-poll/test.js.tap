@@ -1,9 +1,0 @@
-Running toot-together version 0.0.0-development
-Tooting: Here is my poll
-Toot has poll with 4 options: option 1, option 2, option 3, option 4
-TAP version 14
-ok 1 - should be equivalent
-ok 2 - should be equal
-tooted: https://mastodon.example/@joschi/1
-ok 3 - should be equal
-1..3
