@@ -1,3 +1,0 @@
-Running toot-together version 0.0.0-development
-HttpError
-::error::HttpError%0A    at <anonymous> (/home/runner/work/toot-together/toot-together/node_modules/@octokit/action/node_modules/@octokit/request/dist-src/fetch-wrapper.js:68:27)%0A    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)%0A    at async getNewToots (/home/runner/work/toot-together/toot-together/lib/pull-request/get-new-toots.js:9:20)%0A    at async handlePullRequest (/home/runner/work/toot-together/toot-together/lib/pull-request/index.js:25:20)%0A    at async main (/home/runner/work/toot-together/toot-together/lib/index.js:42:7)

@@ -1,7 +1,0 @@
-Running toot-together version 0.0.0-development
-Tooting: Hello, world!
-TAP version 14
-ok 1 - should be equal
-tooted: https://mastodon.example/@joschi/1
-ok 2 - should be equal
-1..2
