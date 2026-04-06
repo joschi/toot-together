@@ -3,7 +3,7 @@
  */
 
 const assert = require("assert");
-
+const { mockGitHub, pendingMocks, setup } = require("../mock-github");
 const nock = require("nock");
 const tap = require("tap");
 
@@ -22,7 +22,8 @@ process.env.GITHUB_REPOSITORY = "";
 process.env.GITHUB_SHA = "";
 
 // MOCK
-nock("https://api.github.com", {
+setup();
+mockGitHub({
   reqheaders: {
     authorization: "token secret123",
   },
