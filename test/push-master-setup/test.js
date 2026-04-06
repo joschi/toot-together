@@ -6,7 +6,7 @@
 const assert = require("assert");
 const path = require("path");
 
-const { MockAgent, setGlobalDispatcher } = require("undici");
+const { mockGitHub, pendingMocks, setup } = require("../mock-github");
 const nock = require("nock");
 const tap = require("tap");
 
@@ -25,96 +25,61 @@ process.env.GITHUB_ACTOR = "";
 process.env.GITHUB_REPOSITORY = "";
 
 // MOCK
-const mockAgent = new MockAgent();
-mockAgent.disableNetConnect();
-setGlobalDispatcher(mockAgent);
-const githubMock = mockAgent.get("https://api.github.com");
+setup();
+mockGitHub({
+  reqheaders: {
+    authorization: "token secret123",
+  },
+})
+  // check if toot-together-setup branch exists
+  .head("/repos/joschi/toot-together/git/refs/heads%2Ftoot-together-setup")
+  .reply(404)
 
-// check if toot-together-setup branch exists
-githubMock
-  .intercept({
-    path: "/repos/joschi/toot-together/git/refs/heads%2Ftoot-together-setup",
-    method: "HEAD",
-    headers: { authorization: "token secret123" },
-  })
-  .reply(404);
+  // Create the "toot-together-setup" branch
+  .post("/repos/joschi/toot-together/git/refs", (body) => {
+    tap.equal(body.ref, "refs/heads/toot-together-setup");
+    tap.equal(body.sha, "0000000000000000000000000000000000000002");
 
-// Create the "toot-together-setup" branch
-githubMock
-  .intercept({
-    path: "/repos/joschi/toot-together/git/refs",
-    method: "POST",
-    headers: { authorization: "token secret123" },
-    body: (body) => {
-      const parsed = JSON.parse(body);
-      tap.equal(parsed.ref, "refs/heads/toot-together-setup");
-      tap.equal(parsed.sha, "0000000000000000000000000000000000000002");
-      return true;
-    },
+    return true;
   })
-  .reply(201, JSON.stringify({}), {
-    headers: { "content-type": "application/json" },
+  .reply(201)
+
+  // Read contents of toots/README.md file in joschi/toot-together
+  .get("/repos/joschi/toot-together/contents/toots%2FREADME.md")
+  .reply(200, "contents of toots/README.md")
+
+  // Create toots/README.md file
+  .put("/repos/joschi/toot-together/contents/toots%2FREADME.md", (body) => {
+    tap.equal(
+      body.content,
+      Buffer.from("contents of toots/README.md").toString("base64"),
+    );
+    tap.equal(body.branch, "toot-together-setup");
+    tap.equal(body.message, "toot-together setup");
+
+    return true;
+  })
+  .reply(201)
+
+  // Create pull request
+  .post("/repos/joschi/toot-together/pulls", (body) => {
+    tap.equal(body.title, "🐘 toot-together setup");
+    tap.match(
+      body.body,
+      /This pull requests creates the `toots\/` folder where your `\*\.toot` files go into/,
+    );
+    tap.equal(body.head, "toot-together-setup");
+    tap.equal(body.base, "master");
+
+    return true;
+  })
+  .reply(201, {
+    html_url: "https://github.com/joschi/toot-together/pull/123",
   });
-
-// Read contents of toots/README.md file in joschi/toot-together
-githubMock
-  .intercept({
-    path: "/repos/joschi/toot-together/contents/toots%2FREADME.md",
-    method: "GET",
-    headers: { authorization: "token secret123" },
-  })
-  .reply(200, "contents of toots/README.md");
-
-// Create toots/README.md file
-githubMock
-  .intercept({
-    path: "/repos/joschi/toot-together/contents/toots%2FREADME.md",
-    method: "PUT",
-    headers: { authorization: "token secret123" },
-    body: (body) => {
-      const parsed = JSON.parse(body);
-      tap.equal(
-        parsed.content,
-        Buffer.from("contents of toots/README.md").toString("base64"),
-      );
-      tap.equal(parsed.branch, "toot-together-setup");
-      tap.equal(parsed.message, "toot-together setup");
-      return true;
-    },
-  })
-  .reply(201, JSON.stringify({}), {
-    headers: { "content-type": "application/json" },
-  });
-
-// Create pull request
-githubMock
-  .intercept({
-    path: "/repos/joschi/toot-together/pulls",
-    method: "POST",
-    headers: { authorization: "token secret123" },
-    body: (body) => {
-      const parsed = JSON.parse(body);
-      tap.equal(parsed.title, "🐘 toot-together setup");
-      tap.match(
-        parsed.body,
-        /This pull requests creates the `toots\/` folder where your `\*\.toot` files go into/,
-      );
-      tap.equal(parsed.head, "toot-together-setup");
-      tap.equal(parsed.base, "master");
-      return true;
-    },
-  })
-  .reply(
-    201,
-    JSON.stringify({
-      html_url: "https://github.com/joschi/toot-together/pull/123",
-    }),
-    { headers: { "content-type": "application/json" } },
-  );
 
 process.on("exit", (code) => {
   assert.equal(code, 0);
-  mockAgent.assertNoPendingInterceptors();
+  assert.deepEqual(pendingMocks(), []);
 });
 
 require("../../lib");

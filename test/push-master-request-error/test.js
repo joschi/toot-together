@@ -5,7 +5,7 @@
 
 const path = require("path");
 
-const { MockAgent, setGlobalDispatcher } = require("undici");
+const { mockGitHub, pendingMocks, setup } = require("../mock-github");
 const nock = require("nock");
 const tap = require("tap");
 
@@ -25,22 +25,17 @@ process.env.GITHUB_REPOSITORY = "";
 process.env.GITHUB_SHA = "";
 
 // MOCK
-const mockAgent = new MockAgent();
-mockAgent.disableNetConnect();
-setGlobalDispatcher(mockAgent);
-const githubMock = mockAgent.get("https://api.github.com");
-
-// get changed files
-githubMock
-  .intercept({
-    path: "/repos/joschi/toot-together/compare/0000000000000000000000000000000000000001...0000000000000000000000000000000000000002",
-    method: "GET",
-  })
+setup();
+mockGitHub()
+  // get changed files
+  .get(
+    "/repos/joschi/toot-together/compare/0000000000000000000000000000000000000001...0000000000000000000000000000000000000002",
+  )
   .reply(500);
 
 process.on("exit", (code) => {
   tap.equal(code, 1);
-  mockAgent.assertNoPendingInterceptors();
+  tap.deepEqual(pendingMocks(), []);
 
   // above code exits with 1 (error), but tap expects 0.
   // Tap adds the "process.exitCode" property for that purpose.

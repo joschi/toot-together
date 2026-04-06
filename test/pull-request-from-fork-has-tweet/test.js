@@ -4,7 +4,7 @@
 
 const assert = require("assert");
 
-const { MockAgent, setGlobalDispatcher } = require("undici");
+const { mockGitHub, pendingMocks, setup } = require("../mock-github");
 const nock = require("nock");
 const tap = require("tap");
 
@@ -23,39 +23,29 @@ process.env.GITHUB_REPOSITORY = "";
 process.env.GITHUB_SHA = "";
 
 // MOCK
-const mockAgent = new MockAgent();
-mockAgent.disableNetConnect();
-setGlobalDispatcher(mockAgent);
-const githubMock = mockAgent.get("https://api.github.com");
-
-// get changed files
-githubMock
-  .intercept({
-    path: "/repos/joschi/toot-together/pulls/123/files",
-    method: "GET",
-    headers: { authorization: "token secret123" },
-  })
-  .reply(
-    200,
-    JSON.stringify([
-      {
-        status: "added",
-        filename: "toots/hello-world.toot",
-      },
-    ]),
-    { headers: { "content-type": "application/json" } },
-  );
+setup();
+mockGitHub({
+  reqheaders: {
+    authorization: "token secret123",
+  },
+})
+  // get changed files
+  .get("/repos/joschi/toot-together/pulls/123/files")
+  .reply(200, [
+    {
+      status: "added",
+      filename: "toots/hello-world.toot",
+    },
+  ]);
 
 // get pull request diff
-githubMock
-  .intercept({
-    path: "/repos/joschi/toot-together/pulls/123",
-    method: "GET",
-    headers: {
-      accept: "application/vnd.github.diff",
-      authorization: "token secret123",
-    },
-  })
+mockGitHub({
+  reqheaders: {
+    accept: "application/vnd.github.diff",
+    authorization: "token secret123",
+  },
+})
+  .get("/repos/joschi/toot-together/pulls/123")
   .reply(
     200,
     `diff --git a/toots/progress.toot b/toots/progress.toot
@@ -69,7 +59,7 @@ index 0000000..0123456
 
 process.on("exit", (code) => {
   assert.equal(code, 0);
-  mockAgent.assertNoPendingInterceptors();
+  assert.deepEqual(pendingMocks(), []);
 });
 
 require("../../lib");

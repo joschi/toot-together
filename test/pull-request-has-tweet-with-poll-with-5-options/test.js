@@ -4,7 +4,7 @@
 
 const assert = require("assert");
 
-const { MockAgent, setGlobalDispatcher } = require("undici");
+const { mockGitHub, pendingMocks, setup } = require("../mock-github");
 const nock = require("nock");
 const tap = require("tap");
 
@@ -23,39 +23,29 @@ process.env.GITHUB_REPOSITORY = "";
 process.env.GITHUB_SHA = "";
 
 // MOCK
-const mockAgent = new MockAgent();
-mockAgent.disableNetConnect();
-setGlobalDispatcher(mockAgent);
-const githubMock = mockAgent.get("https://api.github.com");
-
-// get changed files
-githubMock
-  .intercept({
-    path: "/repos/joschi/toot-together/pulls/123/files",
-    method: "GET",
-    headers: { authorization: "token secret123" },
-  })
-  .reply(
-    200,
-    JSON.stringify([
-      {
-        status: "added",
-        filename: "toots/hello-world.toot",
-      },
-    ]),
-    { headers: { "content-type": "application/json" } },
-  );
+setup();
+mockGitHub({
+  reqheaders: {
+    authorization: "token secret123",
+  },
+})
+  // get changed files
+  .get("/repos/joschi/toot-together/pulls/123/files")
+  .reply(200, [
+    {
+      status: "added",
+      filename: "toots/hello-world.toot",
+    },
+  ]);
 
 // get pull request diff
-githubMock
-  .intercept({
-    path: "/repos/joschi/toot-together/pulls/123",
-    method: "GET",
-    headers: {
-      accept: "application/vnd.github.diff",
-      authorization: "token secret123",
-    },
-  })
+mockGitHub({
+  reqheaders: {
+    accept: "application/vnd.github.diff",
+    authorization: "token secret123",
+  },
+})
+  .get("/repos/joschi/toot-together/pulls/123")
   .reply(
     200,
     `diff --git a/toots/progress.toot b/toots/progress.toot
@@ -74,34 +64,29 @@ index 0000000..0123456
   );
 
 // create check run
-githubMock
-  .intercept({
-    path: "/repos/joschi/toot-together/check-runs",
-    method: "POST",
-    body: (body) => {
-      const parsed = JSON.parse(body);
-      tap.equal(parsed.name, "preview");
-      tap.equal(parsed.head_sha, "0000000000000000000000000000000000000002");
-      tap.equal(parsed.status, "completed");
-      tap.equal(parsed.conclusion, "success");
-      tap.deepEqual(parsed.output, {
-        title: "1 toot(s)",
-        summary: `### ❌ Invalid
+mockGitHub()
+  // get changed files
+  .post("/repos/joschi/toot-together/check-runs", (body) => {
+    tap.equal(body.name, "preview");
+    tap.equal(body.head_sha, "0000000000000000000000000000000000000002");
+    tap.equal(body.status, "completed");
+    tap.equal(body.conclusion, "success");
+    tap.deepEqual(body.output, {
+      title: "1 toot(s)",
+      summary: `### ❌ Invalid
 
 > Here is my poll
 
 The toot includes a poll, but it has 5 options. A poll must have 2-4 options.`,
-      });
-      return true;
-    },
+    });
+
+    return true;
   })
-  .reply(201, JSON.stringify({}), {
-    headers: { "content-type": "application/json" },
-  });
+  .reply(201);
 
 process.on("exit", (code) => {
   assert.equal(code, 0);
-  mockAgent.assertNoPendingInterceptors();
+  assert.deepEqual(pendingMocks(), []);
 });
 
 require("../../lib");

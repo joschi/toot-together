@@ -5,7 +5,7 @@
 
 const path = require("path");
 
-const { MockAgent, setGlobalDispatcher } = require("undici");
+const { mockGitHub, pendingMocks, setup } = require("../mock-github");
 const nock = require("nock");
 const tap = require("tap");
 
@@ -24,33 +24,24 @@ process.env.GITHUB_REPOSITORY = "";
 process.env.GITHUB_SHA = "";
 
 // MOCK
-const mockAgent = new MockAgent();
-mockAgent.disableNetConnect();
-setGlobalDispatcher(mockAgent);
-const githubMock = mockAgent.get("https://api.github.com");
-
-// get changed files
-githubMock
-  .intercept({
-    path: "/repos/joschi/toot-together/compare/0000000000000000000000000000000000000001...0000000000000000000000000000000000000002",
-    method: "GET",
-  })
-  .reply(
-    200,
-    JSON.stringify({
-      files: [
-        {
-          status: "updated",
-          filename: "toots/hello-world.toot",
-        },
-      ],
-    }),
-    { headers: { "content-type": "application/json" } },
-  );
+setup();
+mockGitHub()
+  // get changed files
+  .get(
+    "/repos/joschi/toot-together/compare/0000000000000000000000000000000000000001...0000000000000000000000000000000000000002",
+  )
+  .reply(200, {
+    files: [
+      {
+        status: "updated",
+        filename: "toots/hello-world.toot",
+      },
+    ],
+  });
 
 process.on("exit", (code) => {
   tap.equal(code, 0);
-  mockAgent.assertNoPendingInterceptors();
+  tap.deepEqual(pendingMocks(), []);
 
   // for some reason, tap fails with "Suites:   1 failed" if we don't exit explicitly
   process.exit(0);
