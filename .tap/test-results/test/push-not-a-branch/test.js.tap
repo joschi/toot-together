@@ -1,0 +1,4 @@
+Running toot-together version 0.0.0-development
+GITHUB_REF is not a branch: refs/tags/v1.0.0
+TAP version 14
+ok 1 - should be equal

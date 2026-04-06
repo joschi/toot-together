@@ -1,0 +1,208 @@
+Running toot-together version 0.0.0-development
+Tooting: Here is my poll
+Toot has poll with 4 options: option 1, option 2, option 3, option 4
+error
+TypeError: tap.deepEquals is not a function
+    at Object.<anonymous> [90m(/home/runner/work/toot-together/toot-together/[39mtest/push-master-has-tweet-with-poll/test.js:66:9[90m)[39m
+    at matchBody [90m(/home/runner/work/toot-together/toot-together/[39mnode_modules/[4mnock[24m/lib/match_body.js:42:17[90m)[39m
+    at Interceptor.match [90m(/home/runner/work/toot-together/toot-together/[39mnode_modules/[4mnock[24m/lib/interceptor.js:365:17[90m)[39m
+    at [90m/home/runner/work/toot-together/toot-together/[39mnode_modules/[4mnock[24m/lib/intercepted_request_router.js:299:9
+    at Array.find (<anonymous>)
+    at InterceptedRequestRouter.startPlayback [90m(/home/runner/work/toot-together/toot-together/[39mnode_modules/[4mnock[24m/lib/intercepted_request_router.js:298:45[90m)[39m
+    at InterceptedRequestRouter.maybeStartPlayback [90m(/home/runner/work/toot-together/toot-together/[39mnode_modules/[4mnock[24m/lib/intercepted_request_router.js:263:12[90m)[39m
+    at InterceptedRequestRouter.handleEnd [90m(/home/runner/work/toot-together/toot-together/[39mnode_modules/[4mnock[24m/lib/intercepted_request_router.js:211:10[90m)[39m
+    at req.end [90m(/home/runner/work/toot-together/toot-together/[39mnode_modules/[4mnock[24m/lib/intercepted_request_router.js:95:33[90m)[39m
+    at _Emitter.<anonymous> [90m(/home/runner/work/toot-together/toot-together/[39mnode_modules/[4mnock[24m/lib/intercept.js:425:23[90m)[39m {
+  config: {
+    url: [32m'/api/v1/statuses'[39m,
+    method: [32m'post'[39m,
+    headers: {
+      Accept: [32m'application/json, text/plain, */*'[39m,
+      [32m'Content-Type'[39m: [32m'application/json'[39m,
+      Authorization: [32m'Bearer undefined'[39m,
+      [32m'User-Agent'[39m: [32m'axios/0.21.4'[39m,
+      [32m'Content-Length'[39m: [33m136[39m
+    },
+    baseURL: [32m'https://mastodon.example'[39m,
+    transformRequest: [ [36m[Function: transformRequest][39m ],
+    transformResponse: [36m[Function (anonymous)][39m,
+    timeout: [33m0[39m,
+    adapter: [36m[Function: httpAdapter][39m,
+    xsrfCookieName: [32m'XSRF-TOKEN'[39m,
+    xsrfHeaderName: [32m'X-XSRF-TOKEN'[39m,
+    maxContentLength: [33m-1[39m,
+    maxBodyLength: [33m-1[39m,
+    validateStatus: [36m[Function: validateStatus][39m,
+    transitional: {
+      silentJSONParsing: [33mtrue[39m,
+      forcedJSONParsing: [33mtrue[39m,
+      clarifyTimeoutError: [33mfalse[39m
+    },
+    data: [32m'{"visibility":"unlisted","status":"Here is my poll","poll":{"expires_in":86400,"options":["option 1","option 2","option 3","option 4"]}}'[39m
+  },
+  request: [36m<ref *1>[39m Writable {
+    _events: {
+      close: [90mundefined[39m,
+      error: [36m[Function: handleRequestError][39m,
+      prefinish: [90mundefined[39m,
+      finish: [90mundefined[39m,
+      drain: [90mundefined[39m,
+      response: [36m[Function: handleResponse][39m
+    },
+    _writableState: WritableState {
+      highWaterMark: [33m65536[39m,
+      length: [33m0[39m,
+      corked: [33m0[39m,
+      onwrite: [36m[Function: bound onwrite][39m,
+      writelen: [33m0[39m,
+      bufferedIndex: [33m0[39m,
+      pendingcb: [33m0[39m,
+      [32mSymbol(kState)[39m: [33m17580812[39m,
+      [32mSymbol(kBufferedValue)[39m: [1mnull[22m
+    },
+    _maxListeners: [90mundefined[39m,
+    _options: {
+      maxRedirects: [33m21[39m,
+      maxBodyLength: [33m10485760[39m,
+      protocol: [32m'https:'[39m,
+      path: [32m'/api/v1/statuses'[39m,
+      method: [32m'POST'[39m,
+      headers: [36m[Object][39m,
+      agent: [90mundefined[39m,
+      agents: [36m[Object][39m,
+      auth: [90mundefined[39m,
+      hostname: [32m'mastodon.example'[39m,
+      port: [1mnull[22m,
+      nativeProtocols: [36m[Object][39m,
+      pathname: [32m'/api/v1/statuses'[39m
+    },
+    _ended: [33mfalse[39m,
+    _ending: [33mtrue[39m,
+    _redirectCount: [33m0[39m,
+    _redirects: [],
+    _requestBodyLength: [33m136[39m,
+    _requestBodyBuffers: [ [36m[Object][39m ],
+    _eventsCount: [33m2[39m,
+    _onNativeResponse: [36m[Function (anonymous)][39m,
+    _currentRequest: ClientRequest {
+      _events: [36m[Object: null prototype][39m,
+      _eventsCount: [33m7[39m,
+      _maxListeners: [90mundefined[39m,
+      outputData: [],
+      outputSize: [33m0[39m,
+      writable: [33mtrue[39m,
+      destroyed: [33mfalse[39m,
+      _last: [33mtrue[39m,
+      chunkedEncoding: [33mfalse[39m,
+      shouldKeepAlive: [33mfalse[39m,
+      maxRequestsOnConnectionReached: [33mfalse[39m,
+      _defaultKeepAlive: [33mtrue[39m,
+      useChunkedEncodingByDefault: [33mtrue[39m,
+      sendDate: [33mfalse[39m,
+      _removedConnection: [33mfalse[39m,
+      _removedContLen: [33mfalse[39m,
+      _removedTE: [33mfalse[39m,
+      strictContentLength: [33mfalse[39m,
+      _contentLength: [33m136[39m,
+      _hasBody: [33mtrue[39m,
+      _trailer: [32m''[39m,
+      finished: [33mfalse[39m,
+      _headerSent: [33mtrue[39m,
+      _closed: [33mfalse[39m,
+      _header: [32m'POST /api/v1/statuses HTTP/1.1\r\n'[39m +
+        [32m'Accept: application/json, text/plain, */*\r\n'[39m +
+        [32m'Content-Type: application/json\r\n'[39m +
+        [32m'Authorization: Bearer undefined\r\n'[39m +
+        [32m'User-Agent: axios/0.21.4\r\n'[39m +
+        [32m'Content-Length: 136\r\n'[39m +
+        [32m'Host: mastodon.example\r\n'[39m +
+        [32m'Connection: close\r\n'[39m +
+        [32m'\r\n'[39m,
+      _keepAliveTimeout: [33m0[39m,
+      _onPendingData: [36m[Function: nop][39m,
+      agent: [36m[MockHttpsAgent][39m,
+      socketPath: [90mundefined[39m,
+      method: [32m'POST'[39m,
+      maxHeaderSize: [90mundefined[39m,
+      insecureHTTPParser: [90mundefined[39m,
+      joinDuplicateHeaders: [90mundefined[39m,
+      path: [32m'/api/v1/statuses'[39m,
+      _ended: [33mfalse[39m,
+      res: [1mnull[22m,
+      aborted: [33mfalse[39m,
+      timeoutCb: [1mnull[22m,
+      upgradeOrConnect: [33mfalse[39m,
+      parser: [1mnull[22m,
+      maxHeadersCount: [1mnull[22m,
+      reusedSocket: [33mfalse[39m,
+      host: [32m'mastodon.example'[39m,
+      protocol: [32m'https:'[39m,
+      _redirectable: [36m[Circular *1][39m,
+      [32mSymbol(shapeMode)[39m: [33mfalse[39m,
+      [32mSymbol(kCapture)[39m: [33mfalse[39m,
+      [32mSymbol(kBytesWritten)[39m: [33m0[39m,
+      [32mSymbol(kNeedDrain)[39m: [33mfalse[39m,
+      [32mSymbol(corked)[39m: [33m0[39m,
+      [32mSymbol(kChunkedBuffer)[39m: [],
+      [32mSymbol(kChunkedLength)[39m: [33m0[39m,
+      [32mSymbol(kSocket)[39m: [36m[MockHttpSocket][39m,
+      [32mSymbol(kOutHeaders)[39m: [36m[Object: null prototype][39m,
+      [32mSymbol(errored)[39m: [1mnull[22m,
+      [32mSymbol(kHighWaterMark)[39m: [33m65536[39m,
+      [32mSymbol(kRejectNonStandardBodyWrites)[39m: [33mfalse[39m,
+      [32mSymbol(kUniqueHeaders)[39m: [1mnull[22m
+    },
+    _currentUrl: [32m'https://mastodon.example/api/v1/statuses'[39m,
+    [32mSymbol(shapeMode)[39m: [33mtrue[39m,
+    [32mSymbol(kCapture)[39m: [33mfalse[39m
+  },
+  response: [90mundefined[39m,
+  isAxiosError: [33mtrue[39m,
+  toJSON: [36m[Function: toJSON][39m
+}
+::error::TypeError: tap.deepEquals is not a function
+TAP version 14
+not ok 1 - should be equal
+  ---
+  compare: ===
+  at:
+    fileName: test/push-master-has-tweet-with-poll/test.js
+    lineNumber: 50
+    columnNumber: 11
+    typeName: Object
+  stack: |
+    Object.<anonymous> (test/push-master-has-tweet-with-poll/test.js:50:11)
+    matchBody (node_modules/nock/lib/match_body.js:42:17)
+    Interceptor.match (node_modules/nock/lib/interceptor.js:365:17)
+    node_modules/nock/lib/intercepted_request_router.js:299:9
+    Array.find
+    InterceptedRequestRouter.startPlayback (node_modules/nock/lib/intercepted_request_router.js:298:45)
+    InterceptedRequestRouter.maybeStartPlayback (node_modules/nock/lib/intercepted_request_router.js:263:12)
+    InterceptedRequestRouter.handleEnd (node_modules/nock/lib/intercepted_request_router.js:211:10)
+    OverriddenClientRequest.req.end [as end] (node_modules/nock/lib/intercepted_request_router.js:95:33)
+    _Emitter.<anonymous> (node_modules/nock/lib/intercept.js:425:23)
+    emitAsync (node_modules/@mswjs/interceptors/lib/node/chunk-C2JSMMHY.js:70:5) (node_modules/@mswjs/interceptors/src/utils/emitAsync.ts:23:9)
+    node_modules/@mswjs/interceptors/lib/node/chunk-C2JSMMHY.js:192:5 (node_modules/@mswjs/interceptors/src/utils/handleRequest.ts:145:9)
+    until (node_modules/@open-draft/until/lib/index.js:29:18) (node_modules/@open-draft/until/src/until.ts:23:18)
+    handleRequest (node_modules/@mswjs/interceptors/lib/node/chunk-C2JSMMHY.js:186:18) (node_modules/@mswjs/interceptors/src/utils/handleRequest.ts:134:18)
+    _ClientRequestInterceptor.onRequest (node_modules/@mswjs/interceptors/lib/node/chunk-ATZKM2BZ.js:978:32) (node_modules/@mswjs/interceptors/src/interceptors/ClientRequest/index.ts:159:30)
+  source: >2
+        "/repos/joschi/toot-together/commits/0000000000000000000000000000000000000002/comments",
+        (body) => {
+          tap.equal(body.body, "Tooted:\n\n- https://mastodon.example/@joschi/1");
+    ----------^
+          return true;
+        },
+  diff: |
+    --- expected
+    +++ actual
+    @@ -1,3 +1,3 @@
+    -Tooted:
+    +Errors:
+  
+    -- https://mastodon.example/@joschi/1
+    +- tap.deepEquals is not a function
+  ...
+
+::error::Error tooting
+1..1
