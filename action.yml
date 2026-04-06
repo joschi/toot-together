@@ -6,15 +6,9 @@ branding:
   color: blue
 inputs:
   visibility:
-    description: "The toot's visibility"
-    type: choice
-    required: false
+    description: "The toot's visibility. Allowed values: public, unlisted, private, direct."
+    required: true
     default: 'unlisted'
-    options:
-      - public
-      - unlisted
-      - private
-      - direct
 runs:
   using: "node20"
   main: "dist/index.js"
