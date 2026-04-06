@@ -6,6 +6,7 @@
 
 const path = require("path");
 
+const { MockAgent, setGlobalDispatcher } = require("undici");
 const nock = require("nock");
 const tap = require("tap");
 
@@ -24,18 +25,23 @@ process.env.GITHUB_REPOSITORY = "";
 process.env.GITHUB_SHA = "";
 
 // MOCK
-nock("https://api.github.com", {
-  reqheaders: {
-    authorization: "token secret123",
-  },
-})
-  // check if toot-together-setup branch exists
-  .head("/repos/joschi/toot-together/git/refs/heads%2Ftoot-together-setup")
+const mockAgent = new MockAgent();
+mockAgent.disableNetConnect();
+setGlobalDispatcher(mockAgent);
+const githubMock = mockAgent.get("https://api.github.com");
+
+// check if toot-together-setup branch exists
+githubMock
+  .intercept({
+    path: "/repos/joschi/toot-together/git/refs/heads%2Ftoot-together-setup",
+    method: "HEAD",
+    headers: { authorization: "token secret123" },
+  })
   .reply(200);
 
 process.on("exit", (code) => {
   tap.equal(code, 0);
-  tap.deepEqual(nock.pendingMocks(), []);
+  mockAgent.assertNoPendingInterceptors();
 
   // for some reason, tap fails with "Suites:   1 failed" if we don't exit explicitly
   process.exit(0);

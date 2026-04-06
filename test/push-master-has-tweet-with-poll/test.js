@@ -6,6 +6,7 @@
 const assert = require("assert");
 const path = require("path");
 
+const { MockAgent, setGlobalDispatcher } = require("undici");
 const nock = require("nock");
 const tap = require("tap");
 
@@ -25,33 +26,46 @@ process.env.GITHUB_REPOSITORY = "";
 process.env.GITHUB_SHA = "";
 
 // MOCK
-nock("https://api.github.com", {
-  reqheaders: {
-    authorization: "token secret123",
-  },
-})
-  // get changed files
-  .get(
-    "/repos/joschi/toot-together/compare/0000000000000000000000000000000000000001...0000000000000000000000000000000000000002",
-  )
-  .reply(200, {
-    files: [
-      {
-        status: "added",
-        filename: "toots/my-poll.toot",
-      },
-    ],
-  })
+const mockAgent = new MockAgent();
+mockAgent.disableNetConnect();
+setGlobalDispatcher(mockAgent);
+const githubMock = mockAgent.get("https://api.github.com");
 
-  // post comment
-  .post(
-    "/repos/joschi/toot-together/commits/0000000000000000000000000000000000000002/comments",
-    (body) => {
-      tap.equal(body.body, "Tooted:\n\n- https://mastodon.example/@joschi/1");
+// get changed files
+githubMock
+  .intercept({
+    path: "/repos/joschi/toot-together/compare/0000000000000000000000000000000000000001...0000000000000000000000000000000000000002",
+    method: "GET",
+    headers: { authorization: "token secret123" },
+  })
+  .reply(
+    200,
+    JSON.stringify({
+      files: [
+        {
+          status: "added",
+          filename: "toots/my-poll.toot",
+        },
+      ],
+    }),
+    { headers: { "content-type": "application/json" } },
+  );
+
+// post comment
+githubMock
+  .intercept({
+    path: "/repos/joschi/toot-together/commits/0000000000000000000000000000000000000002/comments",
+    method: "POST",
+    headers: { authorization: "token secret123" },
+    body: (body) => {
+      const parsed = JSON.parse(body);
+      tap.equal(parsed.body, "Tooted:\n\n- https://mastodon.example/@joschi/1");
       return true;
     },
-  )
-  .reply(201);
+  })
+  .reply(201, JSON.stringify({}), {
+    headers: { "content-type": "application/json" },
+  });
 
 nock("https://mastodon.example")
   .get("/api/v1/instance")
@@ -81,6 +95,7 @@ nock("https://mastodon.example")
 process.on("exit", (code) => {
   assert.equal(code, 0);
   assert.deepEqual(nock.pendingMocks(), []);
+  mockAgent.assertNoPendingInterceptors();
 });
 
 require("../../lib");

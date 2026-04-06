@@ -6,6 +6,7 @@
 const assert = require("assert");
 const path = require("path");
 
+const { MockAgent, setGlobalDispatcher } = require("undici");
 const nock = require("nock");
 const tap = require("tap");
 
@@ -25,34 +26,50 @@ process.env.GITHUB_REPOSITORY = "";
 process.env.GITHUB_SHA = "";
 
 // MOCK
-nock("https://api.github.com", {
-  reqheaders: {
-    authorization: "token secret123",
-  },
-})
-  // get changed files
-  .get(
-    "/repos/joschi/toot-together/compare/0000000000000000000000000000000000000001...0000000000000000000000000000000000000002",
-  )
-  .reply(200, {
-    files: [
-      {
-        status: "added",
-        filename: "toots/cupcake-ipsum.toot",
-      },
-    ],
-  })
+const mockAgent = new MockAgent();
+mockAgent.disableNetConnect();
+setGlobalDispatcher(mockAgent);
+const githubMock = mockAgent.get("https://api.github.com");
 
-  // post comment
-  .post(
-    "/repos/joschi/toot-together/commits/0000000000000000000000000000000000000002/comments",
-    (body) => {
-      console.log(body.body);
-      tap.equal(body.body, "Errors:\n\n- Text character limit of 500 exceeded");
+// get changed files
+githubMock
+  .intercept({
+    path: "/repos/joschi/toot-together/compare/0000000000000000000000000000000000000001...0000000000000000000000000000000000000002",
+    method: "GET",
+    headers: { authorization: "token secret123" },
+  })
+  .reply(
+    200,
+    JSON.stringify({
+      files: [
+        {
+          status: "added",
+          filename: "toots/cupcake-ipsum.toot",
+        },
+      ],
+    }),
+    { headers: { "content-type": "application/json" } },
+  );
+
+// post comment
+githubMock
+  .intercept({
+    path: "/repos/joschi/toot-together/commits/0000000000000000000000000000000000000002/comments",
+    method: "POST",
+    headers: { authorization: "token secret123" },
+    body: (body) => {
+      const parsed = JSON.parse(body);
+      console.log(parsed.body);
+      tap.equal(
+        parsed.body,
+        "Errors:\n\n- Text character limit of 500 exceeded",
+      );
       return true;
     },
-  )
-  .reply(201);
+  })
+  .reply(201, JSON.stringify({}), {
+    headers: { "content-type": "application/json" },
+  });
 
 nock("https://mastodon.example")
   .get("/api/v1/instance")
@@ -69,6 +86,7 @@ nock("https://mastodon.example").post("/api/v1/statuses").reply(422, {
 process.on("exit", (code) => {
   assert.equal(code, 1);
   assert.deepEqual(nock.pendingMocks(), []);
+  mockAgent.assertNoPendingInterceptors();
 
   // above code exits with 1 (error), but tap expects 0.
   // Tap adds the "process.exitCode" property for that purpose.

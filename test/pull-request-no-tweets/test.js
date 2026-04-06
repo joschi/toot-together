@@ -3,6 +3,7 @@
  */
 
 const tap = require("tap");
+const { MockAgent, setGlobalDispatcher } = require("undici");
 const nock = require("nock");
 
 // SETUP
@@ -20,23 +21,32 @@ process.env.GITHUB_REPOSITORY = "";
 process.env.GITHUB_SHA = "";
 
 // MOCK
-nock("https://api.github.com", {
-  reqheaders: {
-    authorization: "token secret123",
-  },
-})
-  // get changed files
-  .get("/repos/joschi/toot-together/pulls/123/files")
-  .reply(200, [
-    {
-      status: "updated",
-      filename: "toots/hello-world.toot",
-    },
-  ]);
+const mockAgent = new MockAgent();
+mockAgent.disableNetConnect();
+setGlobalDispatcher(mockAgent);
+const githubMock = mockAgent.get("https://api.github.com");
+
+// get changed files
+githubMock
+  .intercept({
+    path: "/repos/joschi/toot-together/pulls/123/files",
+    method: "GET",
+    headers: { authorization: "token secret123" },
+  })
+  .reply(
+    200,
+    JSON.stringify([
+      {
+        status: "updated",
+        filename: "toots/hello-world.toot",
+      },
+    ]),
+    { headers: { "content-type": "application/json" } },
+  );
 
 process.on("exit", (code) => {
   tap.equal(code, 0);
-  tap.deepEqual(nock.pendingMocks(), []);
+  mockAgent.assertNoPendingInterceptors();
 });
 
 require("../../lib");
