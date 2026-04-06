@@ -2,6 +2,8 @@
  * This test checks the happy path of pull request adding a new *.toot file
  */
 
+const assert = require("assert");
+
 const tap = require("tap");
 const nock = require("nock");
 
@@ -20,8 +22,8 @@ process.env.GITHUB_REPOSITORY = "";
 process.env.GITHUB_SHA = "";
 
 process.on("exit", (code) => {
-  tap.equal(code, 0);
-  tap.deepEqual(nock.pendingMocks(), []);
+  assert.equal(code, 0);
+  assert.deepEqual(nock.pendingMocks(), []);
 
   // for some reason, tap fails with "Suites:   1 failed" if we don't exit explicitly
   process.exit(0);

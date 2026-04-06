@@ -5,6 +5,8 @@
 
 const path = require("path");
 
+const assert = require("assert");
+
 const nock = require("nock");
 const tap = require("tap");
 
@@ -38,8 +40,8 @@ nock("https://api.github.com")
   });
 
 process.on("exit", (code) => {
-  tap.equal(code, 0);
-  tap.deepEqual(nock.pendingMocks(), []);
+  assert.equal(code, 0);
+  assert.deepEqual(nock.pendingMocks(), []);
 
   // for some reason, tap fails with "Suites:   1 failed" if we don't exit explicitly
   process.exit(0);
