@@ -501,7 +501,7 @@ const mastojs = __nccwpck_require__(219);
 
 const parseTootFileContent = __nccwpck_require__(9473);
 
-async function toot({ mastodonCredentials }, tootFile) {
+async function toot({ mastodonCredentials, visibility }, tootFile) {
   const client = await mastojs.Masto.login({
     uri: mastodonCredentials.uri,
     accessToken: mastodonCredentials.accessToken,
@@ -516,7 +516,7 @@ async function toot({ mastodonCredentials }, tootFile) {
           options: toot.poll,
         };
   const result = await client.createStatus({
-    visibility: "unlisted",
+    visibility,
     status: toot.text,
     poll,
   });
@@ -62066,6 +62066,8 @@ async function main() {
   const ref = process.env.GITHUB_REF;
   const sha = process.env.GITHUB_SHA;
 
+  const visibility = toolkit.getInput('visibility', { required: false }) || 'unlisted'
+
   const state = {
     toolkit,
     octokit,
@@ -62077,6 +62079,7 @@ async function main() {
       uri: process.env.MASTODON_URL,
       accessToken: process.env.MASTODON_ACCESS_TOKEN,
     },
+    visibility,
   };
 
   switch (process.env.GITHUB_EVENT_NAME) {
