@@ -1,28 +1,2 @@
 Running toot-together version 0.0.0-development
 Pull request base "patch" is not the repository’s default branch
-TAP version 14
-ok 1 - should be equal
-not ok 2 - tap.deepEqual is not a function
-  ---
-  stack: |
-    process.<anonymous> (test/pull-request-wrong-base/test.js:24:7)
-  at:
-    fileName: test/pull-request-wrong-base/test.js
-    lineNumber: 24
-    columnNumber: 7
-    typeName: process
-    methodName: <anonymous>
-    functionName: process.<anonymous>
-  type: TypeError
-  tapCaught: uncaughtException
-  test: TAP
-  source: >
-    process.on("exit", (code) => {
-      tap.equal(code, 0);
-      tap.deepEqual(nock.pendingMocks(), []);
-    ------^
-  
-      // for some reason, tap fails with "Suites:   1 failed" if we don't exit explicitly
-  ...
-
-1..2

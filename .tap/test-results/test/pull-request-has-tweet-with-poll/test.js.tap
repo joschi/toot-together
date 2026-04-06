@@ -6,5 +6,6 @@ ok 1 - should be equal
 ok 2 - should be equal
 ok 3 - should be equal
 ok 4 - should be equal
-HttpError: request to https://api.github.com/repos/joschi/toot-together/check-runs failed, reason: tap.deepEqual is not a function
-::error::HttpError: request to https://api.github.com/repos/joschi/toot-together/check-runs failed, reason: tap.deepEqual is not a function%0A    at error (/home/runner/work/toot-together/toot-together/node_modules/@octokit/action/node_modules/@octokit/request/dist-src/fetch-wrapper.js:92:15)%0A    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)%0A    at async createCheckRun (/home/runner/work/toot-together/toot-together/lib/pull-request/create-check-run.js:29:20)%0A    at async handlePullRequest (/home/runner/work/toot-together/toot-together/lib/pull-request/index.js:26:3)%0A    at async main (/home/runner/work/toot-together/toot-together/lib/index.js:42:7)
+ok 5 - should be equivalent
+check run created: undefined
+1..5

@@ -2,29 +2,3 @@ Running toot-together version 0.0.0-development
 toots/ folder does not yet exist. Starting setup
 Checking if "toot-together-setup" branch exists already
 "toot-together-setup" branch already exists
-TAP version 14
-ok 1 - should be equal
-not ok 2 - tap.deepEqual is not a function
-  ---
-  stack: |
-    process.<anonymous> (test/push-master-setup-pending/test.js:38:7)
-  at:
-    fileName: test/push-master-setup-pending/test.js
-    lineNumber: 38
-    columnNumber: 7
-    typeName: process
-    methodName: <anonymous>
-    functionName: process.<anonymous>
-  type: TypeError
-  tapCaught: uncaughtException
-  test: TAP
-  source: >
-    process.on("exit", (code) => {
-      tap.equal(code, 0);
-      tap.deepEqual(nock.pendingMocks(), []);
-    ------^
-  
-      // for some reason, tap fails with "Suites:   1 failed" if we don't exit explicitly
-  ...
-
-1..2

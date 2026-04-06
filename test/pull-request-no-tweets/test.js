@@ -2,6 +2,8 @@
  * This test checks the happy path of pull request adding a new *.toot file
  */
 
+const assert = require("assert");
+
 const tap = require("tap");
 const nock = require("nock");
 
@@ -35,8 +37,8 @@ nock("https://api.github.com", {
   ]);
 
 process.on("exit", (code) => {
-  tap.equal(code, 0);
-  tap.deepEqual(nock.pendingMocks(), []);
+  assert.equal(code, 0);
+  assert.deepEqual(nock.pendingMocks(), []);
 });
 
 require("../../lib");

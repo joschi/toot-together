@@ -68,7 +68,7 @@ nock("https://api.github.com")
     tap.equal(body.head_sha, "0000000000000000000000000000000000000002");
     tap.equal(body.status, "completed");
     tap.equal(body.conclusion, "success");
-    tap.deepEqual(body.output, {
+    tap.same(body.output, {
       title: "1 toot(s)",
       summary: `### ✅ Valid
 
