@@ -6,6 +6,7 @@
 const assert = require("assert");
 const path = require("path");
 
+const { mockGitHub, pendingMocks, setup } = require("../mock-github");
 const nock = require("nock");
 const tap = require("tap");
 
@@ -24,7 +25,8 @@ process.env.GITHUB_ACTOR = "";
 process.env.GITHUB_REPOSITORY = "";
 
 // MOCK
-nock("https://api.github.com", {
+setup();
+mockGitHub({
   reqheaders: {
     authorization: "token secret123",
   },
@@ -77,7 +79,7 @@ nock("https://api.github.com", {
 
 process.on("exit", (code) => {
   assert.equal(code, 0);
-  assert.deepEqual(nock.pendingMocks(), []);
+  assert.deepEqual(pendingMocks(), []);
 });
 
 require("../../lib");

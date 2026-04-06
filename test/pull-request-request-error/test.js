@@ -4,6 +4,7 @@
 
 const assert = require("assert");
 
+const { mockGitHub, pendingMocks, setup } = require("../mock-github");
 const nock = require("nock");
 const tap = require("tap");
 
@@ -22,7 +23,8 @@ process.env.GITHUB_REPOSITORY = "";
 process.env.GITHUB_SHA = "";
 
 // MOCK
-nock("https://api.github.com", {
+setup();
+mockGitHub({
   reqheaders: {
     authorization: "token secret123",
   },
@@ -33,7 +35,7 @@ nock("https://api.github.com", {
 
 process.on("exit", (code) => {
   assert.equal(code, 1);
-  assert.deepEqual(nock.pendingMocks(), []);
+  assert.deepEqual(pendingMocks(), []);
 
   // above code exits with 1 (error), but tap expects 0.
   // Tap adds the "process.exitCode" property for that purpose.
