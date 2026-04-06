@@ -2,7 +2,10 @@
  * This test checks the happy path of pull request adding a new *.toot file
  */
 
+const assert = require("assert");
+
 const tap = require("tap");
+const { mockGitHub, pendingMocks, setup } = require("../mock-github");
 const nock = require("nock");
 
 // SETUP
@@ -20,7 +23,8 @@ process.env.GITHUB_REPOSITORY = "";
 process.env.GITHUB_SHA = "";
 
 // MOCK
-nock("https://api.github.com", {
+setup();
+mockGitHub({
   reqheaders: {
     authorization: "token secret123",
   },
@@ -35,8 +39,8 @@ nock("https://api.github.com", {
   ]);
 
 process.on("exit", (code) => {
-  tap.equal(code, 0);
-  tap.deepEqual(nock.pendingMocks(), []);
+  assert.equal(code, 0);
+  assert.deepEqual(nock.pendingMocks(), []);
 });
 
 require("../../lib");

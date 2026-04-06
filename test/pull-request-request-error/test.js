@@ -2,6 +2,8 @@
  * This test checks a 500 server response when crying to retrieve pull request files
  */
 
+const assert = require("assert");
+const { mockGitHub, pendingMocks, setup } = require("../mock-github");
 const nock = require("nock");
 const tap = require("tap");
 
@@ -20,7 +22,8 @@ process.env.GITHUB_REPOSITORY = "";
 process.env.GITHUB_SHA = "";
 
 // MOCK
-nock("https://api.github.com", {
+setup();
+mockGitHub({
   reqheaders: {
     authorization: "token secret123",
   },
@@ -30,8 +33,8 @@ nock("https://api.github.com", {
   .reply(500);
 
 process.on("exit", (code) => {
-  tap.equal(code, 1);
-  tap.deepEqual(nock.pendingMocks(), []);
+  assert.equal(code, 1);
+  assert.deepEqual(nock.pendingMocks(), []);
 
   // above code exits with 1 (error), but tap expects 0.
   // Tap adds the "process.exitCode" property for that purpose.

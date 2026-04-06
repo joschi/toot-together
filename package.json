@@ -8,7 +8,7 @@
     "coverage": "nyc report --reporter=html && open coverage/index.html",
     "lint": "prettier --check '{lib,test}/**/*.js' 'docs/*.md' 'toots/README.md' README.md package.json",
     "lint:fix": "prettier --write '{lib,test}/**/*.js' 'docs/*.md' 'toots/README.md' README.md package.json",
-    "test": "tap --100 test/*/test.js",
+    "test": "tap test/*/test.js",
     "posttest": "npm run -s lint"
   },
   "keywords": [],
@@ -16,7 +16,7 @@
   "license": "MIT",
   "dependencies": {
     "@actions/core": "1.11.1",
-    "@octokit/action": "^4.0.10",
+    "@octokit/action": "^8.0.4",
     "masto": "^3.7.0",
     "parse-diff": "^0.11.1"
   },
@@ -26,7 +26,7 @@
     "nock": "^14.0.10",
     "prettier": "^3.6.2",
     "semantic-release": "^24.2.7",
-    "tap": "^16.3.4"
+    "tap": "^21.6.3"
   },
   "repository": {
     "type": "git",

@@ -5,7 +5,9 @@
  */
 
 const path = require("path");
+const assert = require("assert");
 
+const { mockGitHub, pendingMocks, setup } = require("../mock-github");
 const nock = require("nock");
 const tap = require("tap");
 
@@ -24,7 +26,8 @@ process.env.GITHUB_REPOSITORY = "";
 process.env.GITHUB_SHA = "";
 
 // MOCK
-nock("https://api.github.com", {
+setup();
+mockGitHub({
   reqheaders: {
     authorization: "token secret123",
   },
@@ -34,11 +37,8 @@ nock("https://api.github.com", {
   .reply(200);
 
 process.on("exit", (code) => {
-  tap.equal(code, 0);
-  tap.deepEqual(nock.pendingMocks(), []);
-
-  // for some reason, tap fails with "Suites:   1 failed" if we don't exit explicitly
-  process.exit(0);
+  assert.equal(code, 0);
+  assert.deepEqual(nock.pendingMocks(), []);
 });
 
 require("../../lib");
