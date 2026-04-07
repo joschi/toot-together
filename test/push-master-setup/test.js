@@ -3,19 +3,22 @@
  * when the `toots/` folder does not yet exist
  */
 
-const assert = require("assert");
-const path = require("path");
+import assert from "assert";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
 
-const { mockGitHub, pendingMocks, setup } = require("../mock-github");
-const nock = require("nock");
-const tap = require("tap");
+import { mockGitHub, pendingMocks, setup } from "../mock-github.js";
+import nock from "nock";
+import tap from "tap";
 
 // SETUP
 process.env.GITHUB_EVENT_NAME = "push";
 process.env.GITHUB_TOKEN = "secret123";
-process.env.GITHUB_EVENT_PATH = require.resolve("./event.json");
+process.env.GITHUB_EVENT_PATH = fileURLToPath(
+  new URL("./event.json", import.meta.url),
+);
 process.env.GITHUB_REF = "refs/heads/master";
-process.env.GITHUB_WORKSPACE = path.dirname(process.env.GITHUB_EVENT_PATH);
+process.env.GITHUB_WORKSPACE = dirname(process.env.GITHUB_EVENT_PATH);
 process.env.GITHUB_SHA = "0000000000000000000000000000000000000002";
 
 // set other env variables so action-toolkit is happy
@@ -82,4 +85,4 @@ process.on("exit", (code) => {
   assert.deepEqual(pendingMocks(), []);
 });
 
-require("../../lib");
+await import("../../lib/index.js");

@@ -3,14 +3,17 @@
  * which includes a new *.toot file.
  */
 
-const assert = require("assert");
+import assert from "assert";
+import { fileURLToPath } from "url";
 
-const tap = require("tap");
+import tap from "tap";
 
 // SETUP
 process.env.GITHUB_EVENT_NAME = "push";
 process.env.GITHUB_REF = "refs/tags/v1.0.0";
-process.env.GITHUB_EVENT_PATH = require.resolve("./event.json");
+process.env.GITHUB_EVENT_PATH = fileURLToPath(
+  new URL("./event.json", import.meta.url),
+);
 process.env.GITHUB_TOKEN = "secret123";
 
 // set other env variables so action-toolkit is happy
@@ -25,4 +28,4 @@ process.on("exit", (code) => {
   assert.equal(code, 0);
 });
 
-require("../../lib");
+await import("../../lib/index.js");

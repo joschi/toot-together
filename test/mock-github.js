@@ -2,7 +2,7 @@
 // @octokit/action v8 uses undici's fetch directly, so nock cannot intercept
 // GitHub API requests. This module provides a nock-like chaining API backed
 // by undici MockAgent.
-const { MockAgent, setGlobalDispatcher } = require("undici");
+import { MockAgent, setGlobalDispatcher } from "undici";
 
 let mockAgent;
 let mockPool;
@@ -77,4 +77,4 @@ function mockGitHub(opts) {
   return scope;
 }
 
-module.exports = { setup, pendingMocks, mockGitHub };
+export { setup, pendingMocks, mockGitHub };

@@ -2,16 +2,19 @@
  * This test checks the happy path of pull request adding a new *.toot file
  */
 
-const assert = require("assert");
+import assert from "assert";
+import { fileURLToPath } from "url";
 
-const { mockGitHub, pendingMocks, setup } = require("../mock-github");
-const nock = require("nock");
-const tap = require("tap");
+import { mockGitHub, pendingMocks, setup } from "../mock-github.js";
+import nock from "nock";
+import tap from "tap";
 
 // SETUP
 process.env.GITHUB_EVENT_NAME = "pull_request";
 process.env.GITHUB_TOKEN = "secret123";
-process.env.GITHUB_EVENT_PATH = require.resolve("./event.json");
+process.env.GITHUB_EVENT_PATH = fileURLToPath(
+  new URL("./event.json", import.meta.url),
+);
 
 // set other env variables so action-toolkit is happy
 process.env.GITHUB_REF = "";
@@ -64,4 +67,4 @@ process.on("exit", (code) => {
   process.exitCode = 0;
 });
 
-require("../../lib");
+await import("../../lib/index.js");
