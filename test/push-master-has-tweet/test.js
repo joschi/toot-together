@@ -56,14 +56,6 @@ mockGitHub({
   .reply(201);
 
 nock("https://mastodon.example")
-  .get("/api/v1/instance")
-  .reply(200, {
-    urls: {
-      streaming_api: "wss://mastodon.example",
-    },
-  });
-
-nock("https://mastodon.example")
   .post("/api/v1/statuses", (body) => {
     tap.equal(body.status, "Hello, world!");
     return true;
