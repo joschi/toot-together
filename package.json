@@ -3,6 +3,7 @@
   "version": "0.0.0-development",
   "description": "A GitHub action to toot together using pull requests",
   "main": "lib/index.js",
+  "type": "module",
   "scripts": {
     "build": "ncc build lib/index.js -o dist",
     "coverage": "nyc report --reporter=html && open coverage/index.html",
@@ -15,7 +16,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "1.11.1",
+    "@actions/core": "3.0.0",
     "@octokit/action": "^8.0.4",
     "masto": "^7.10.2",
     "parse-diff": "^0.11.1"
