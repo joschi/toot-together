@@ -12,6 +12,6 @@ jobs:
   merge_schedule:
     runs-on: ubuntu-latest
     steps:
-      - uses: gr2m/merge-schedule-action@v1.x
+      - uses: gr2m/merge-schedule-action@a9b6ddcf1282dfd66907bda8e7941dff59f03bad # v2.7.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
