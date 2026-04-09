@@ -64754,10 +64754,18 @@ __webpack_unused_export__ = defaultContentType
 /* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
 /* harmony export */   A: () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* unused harmony export TOOT_MAX_LENGTH */
 /* harmony import */ var os__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(857);
 
 
 const OPTION_REGEX = /^\[\s?\]\s+/;
+
+const TOOT_MAX_LENGTH = 500;
+
+// Mastodon shortens URLs, so they take up less space.
+const URL_CHARACTER_COUNT = 23;
+const URL_PLACEHOLDER = "x".repeat(URL_CHARACTER_COUNT);
+const URL_REGEX = /https?:\/\/\S+/gi;
 
 function parseTootFileContent(text) {
   const pollOptions = [];
@@ -64767,11 +64775,13 @@ function parseTootFileContent(text) {
     text = withLastLineRemoved(text);
   }
 
+  const urlAwareLength = text.replace(URL_REGEX, URL_PLACEHOLDER).length;
+
   return {
     poll: pollOptions.length ? pollOptions.reverse() : null,
     text,
-    valid: text.length > 0 && text.length <= 500,
-    length: text.length,
+    valid: urlAwareLength > 0 && urlAwareLength <= TOOT_MAX_LENGTH,
+    length: urlAwareLength,
   };
 }
 
@@ -64938,6 +64948,8 @@ async function getNewToots({ octokit, toolkit, payload }) {
 ;// CONCATENATED MODULE: ./lib/pull-request/create-check-run.js
 /* harmony default export */ const create_check_run = (createCheckRun);
 
+
+
 async function createCheckRun(
   { octokit, payload, startedAt, toolkit },
   newToots,
@@ -64958,7 +64970,7 @@ ${toot.text}`);
 
 ${toot.text}
 
-The above toot is ${toot.length - 500} characters too long`);
+The above toot is ${toot.length - parse_toot_file_content/* default */.A} characters too long`);
       }
     }
     process.exit(allTootsValid ? 0 : 1);
@@ -65014,7 +65026,7 @@ ${text}`;
 
 ${text}
 
-The above toot is ${toot.length - 500} characters too long`;
+The above toot is ${toot.length - parse_toot_file_content/* default */.A} characters too long`;
 }
 
 ;// CONCATENATED MODULE: ./lib/pull-request/index.js
