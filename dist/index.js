@@ -64752,9 +64752,9 @@ __webpack_unused_export__ = defaultContentType
 /***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __nccwpck_require__) => {
 
 /* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
-/* harmony export */   A: () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */   A: () => (__WEBPACK_DEFAULT_EXPORT__),
+/* harmony export */   B: () => (/* binding */ TOOT_MAX_LENGTH)
 /* harmony export */ });
-/* unused harmony export TOOT_MAX_LENGTH */
 /* harmony import */ var os__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(857);
 
 
@@ -64970,7 +64970,7 @@ ${toot.text}`);
 
 ${toot.text}
 
-The above toot is ${toot.length - parse_toot_file_content/* default */.A} characters too long`);
+The above toot is ${toot.length - parse_toot_file_content/* TOOT_MAX_LENGTH */.B} characters too long`);
       }
     }
     process.exit(allTootsValid ? 0 : 1);
@@ -65026,7 +65026,7 @@ ${text}`;
 
 ${text}
 
-The above toot is ${toot.length - parse_toot_file_content/* default */.A} characters too long`;
+The above toot is ${toot.length - parse_toot_file_content/* TOOT_MAX_LENGTH */.B} characters too long`;
 }
 
 ;// CONCATENATED MODULE: ./lib/pull-request/index.js
